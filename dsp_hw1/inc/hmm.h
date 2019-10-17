@@ -26,9 +26,9 @@ typedef struct{
    char *model_name;
    int state_num;					//number of state
    int observ_num;					//number of observation
-   double initial[MAX_STATE];			//initial prob.
-   double transition[MAX_STATE][MAX_STATE];	//transition prob.
-   double observation[MAX_OBSERV][MAX_STATE];	//observation prob.
+   double initial[MAX_STATE];			//initial prob. (pi)
+   double transition[MAX_STATE][MAX_STATE];	   //transition prob. (A)
+   double observation[MAX_OBSERV][MAX_STATE];	//observation prob. (B)
 } HMM;
 
 static FILE *open_or_die( const char *filename, const char *ht )
