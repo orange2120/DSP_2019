@@ -1,8 +1,8 @@
 .PHONY: all clean run
-CC= gcc
+CC= g++
 
-CFLAGS= -std=c11
-DBGFLAGS = -g -Wall -std=c11
+#CFLAGS= -std=c++11 -Wall
+CFLAGS = -g -Wall -std=c++11
 OPTFLAGS = -O3
 
 LDFLAGS=-lm
@@ -11,15 +11,14 @@ DBG_TARGET = dbg_train
 
 all: $(TARGET)
 
-train: src/train.c
+train: src/train.cpp src/BWalg.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(OPTFLAGS) -Iinc
 
-test: src/test.c
+test: src/test.cpp
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(OPTFLAGS) -Iinc
 
-
-dbg_train: src/train.c
-	$(CC) -o $@ $^ $(LDFLAGS) $(DBGFLAGS) -Iinc
+BWalg.o: src/BWalg.h src/BWalg.cpp
+	$(CC) -c src/BWalg.h src/BWalg.cpp $(CFLAGS)
 
 clean:
-	rm -f $(TARGET) $(DBG_TARGET)
+	rm -f $(TARGET) $(DBG_TARGET) src/*.o

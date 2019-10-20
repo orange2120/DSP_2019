@@ -28,7 +28,7 @@ typedef struct{
    int observ_num;					//number of observation
    double initial[MAX_STATE];			//initial prob. (pi)
    double transition[MAX_STATE][MAX_STATE];	   //transition prob. (A)
-   double observation[MAX_OBSERV][MAX_STATE];	//observation prob. (B)
+   double observation[MAX_OBSERV][MAX_STATE];	//observation prob. (B) (emission matrix)
 } HMM;
 
 static FILE *open_or_die( const char *filename, const char *ht )
