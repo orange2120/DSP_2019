@@ -9,8 +9,6 @@
 #include "BWalg.h"
 using namespace std;
 
-void dump_Td(char [][MAX_LINE]);
-
 int main(int argc, char *argv[])
 {
     if (argc != 5)
@@ -20,13 +18,15 @@ int main(int argc, char *argv[])
     }
 
     int iterations = 0;
-    
+
     HMM hmm;
     BWalg bw(hmm);
     FILE *model_fp = open_or_die(argv[4], "w");
 
     iterations = atoi(argv[1]);
-    loadHMM(&hmm, argv[2]);     // load models
+    printf("Train iterations: %d\n", iterations);
+
+    loadHMM(&hmm, argv[2]);        // load models
     bw.load_train(argv[3]);        // load trainning data
 
     bw.train(iterations);
@@ -34,4 +34,3 @@ int main(int argc, char *argv[])
     dumpHMM(model_fp, &hmm); // dump trained model to file
     //dump_Td(train_data);
 }
-

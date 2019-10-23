@@ -14,11 +14,14 @@ all: $(TARGET)
 train: src/train.cpp src/BWalg.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(OPTFLAGS) -Iinc
 
-test: src/test.cpp
+test: src/test.cpp src/viterbi.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) $(OPTFLAGS) -Iinc
 
 BWalg.o: src/BWalg.h src/BWalg.cpp
 	$(CC) -c src/BWalg.h src/BWalg.cpp $(CFLAGS)
+
+viterbi.o: src/viterbi.h src/viterbi.cpp
+	$(CC) -c src/viterbi.h src/viterbi.cpp $(CFLAGS)
 
 clean:
 	rm -f $(TARGET) $(DBG_TARGET) src/*.o

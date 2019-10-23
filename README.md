@@ -16,7 +16,10 @@ $\pi:$ State sequence($1{\times}N$ matrix)
 
 $T:$ Observation number ($T=50$ in this case)  
 $N:$ State number ($N=6$ in this case)  
-$\alpha_t(i):$ Forward matrix $(T{\times}N)$  
-$\beta_t(i):$ Backward matrix $(T{\times}N)$  
+$\alpha_t(i):$ Forward variable matrix $(T{\times}N)$  
+$\beta_t(i):$ Backward variable matrix $(T{\times}N)$  
 $\gamma_t(i):$ Temporary variable ($N{\times}T$ matrix)  
 $\epsilon_t(i,j):$ Temporary variable (total $T-1$, each $N{\times}N$ matrix)  
+Notes:    
+$A(i,j)=\{a_{ij}\}:$ prob. of state $i{\rightarrow}j$  
+$B_{jt}=\{b_j(o_t)\}$  
