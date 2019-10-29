@@ -15,10 +15,12 @@ class BWalg
     BWalg(HMM &);
     ~BWalg();
     void train(int);
+    void reset_var();
     void forward_alg(const int &);
     void backward_alg(const int &);
     void get_gamma(const int &);
     void get_epsilon(const int &);
+    void accmulate();
     void update_model();
     void load_train(const char *);
     void dump_td() const;
@@ -32,7 +34,11 @@ class BWalg
     double _beta[MAX_SEQ][MAX_STATE] = {0.0};
     double _gamma[MAX_STATE][MAX_SEQ] = {0.0};
     double _gamma_obeserve[MAX_STATE][MAX_OBSERV] = {0.0};
+    double _sum_gamma_t1[MAX_STATE] = {0.0};
+    double _sum_gamma[MAX_STATE] = {0.0};
+    double _sum_gamma_t[MAX_STATE] = {0.0};
     double _epsilon[MAX_TRAIN_LEN][MAX_STATE][MAX_STATE] = {0.0};
+    double _sum_eps[MAX_STATE][MAX_STATE] = {0.0};
 };
 
 #endif

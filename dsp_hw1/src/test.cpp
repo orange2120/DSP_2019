@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
     }
     
     Viterbi vt;
-    FILE *model_fp = open_or_die(argv[3], "w");
 
     vt.load_models(argv[1]);
-
-    //vt.;
+    vt.load_test(argv[2]);
+    vt.process_models();
+    vt.save_results(argv[3]);
 }

@@ -32,5 +32,4 @@ int main(int argc, char *argv[])
     bw.train(iterations);
 
     dumpHMM(model_fp, &hmm); // dump trained model to file
-    //dump_Td(train_data);
 }
