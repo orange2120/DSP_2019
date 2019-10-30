@@ -1,8 +1,8 @@
 .PHONY: all clean run
 CC= g++
 
-#CFLAGS= -std=c++11 -Wall
-CFLAGS = -g -Wall -std=c++11
+CFLAGS= -std=c++11 -Wall
+#CFLAGS = -g -Wall -std=c++11
 OPTFLAGS = -O3
 
 LDFLAGS=-lm

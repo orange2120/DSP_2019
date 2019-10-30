@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
 
     loadHMM(&hmm, argv[2]);        // load models
     bw.load_train(argv[3]);        // load trainning data
-
     bw.train(iterations);
 
     dumpHMM(model_fp, &hmm); // dump trained model to file

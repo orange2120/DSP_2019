@@ -1,5 +1,5 @@
-#ifndef __BWalg_h__
-#define __BWalg_h__
+#ifndef __BWALG_H__
+#define __BWALG_H__
 
 #include <iostream>
 #include "../inc/hmm.h"
@@ -7,6 +7,7 @@ using namespace std;
 
 #define TRAIN_SIZE 10240
 #define MAX_TRAIN_LEN 64
+#define _MAX_SEQ 64
 
 class BWalg
 {
@@ -16,10 +17,10 @@ class BWalg
     ~BWalg();
     void train(int);
     void reset_var();
-    void forward_alg(const int &);
-    void backward_alg(const int &);
-    void get_gamma(const int &);
-    void get_epsilon(const int &);
+    void forward_alg(const char *);
+    void backward_alg(const char *);
+    void get_gamma(const char *);
+    void get_epsilon(const char *);
     void accmulate();
     void update_model();
     void load_train(const char *);
@@ -27,12 +28,12 @@ class BWalg
 
   private:
     HMM *hmm;
-    char _train_data[TRAIN_SIZE][MAX_LINE];
+    char _train_data[TRAIN_SIZE][_MAX_SEQ];
     int _train_len = 0;
     int _train_lines = 0;
-    double _alpha[MAX_SEQ][MAX_STATE] = {0.0};
-    double _beta[MAX_SEQ][MAX_STATE] = {0.0};
-    double _gamma[MAX_STATE][MAX_SEQ] = {0.0};
+    double _alpha[_MAX_SEQ][MAX_STATE] = {0.0};
+    double _beta[_MAX_SEQ][MAX_STATE] = {0.0};
+    double _gamma[MAX_STATE][_MAX_SEQ] = {0.0};
     double _gamma_obeserve[MAX_STATE][MAX_OBSERV] = {0.0};
     double _sum_gamma_t1[MAX_STATE] = {0.0};
     double _sum_gamma[MAX_STATE] = {0.0};

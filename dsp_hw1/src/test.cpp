@@ -1,6 +1,6 @@
 /****************************************************************************
   FileName     [ test.cpp ]
-  Synopsis     [ test data and output HMM model ]
+  Synopsis     [ testing data and output predicted model ]
   Author       [ Orange Hsu ]
   Copyright    [ Copyleft(c) 2019-present , NTU, Taiwan ]
 ****************************************************************************/
@@ -23,4 +23,5 @@ int main(int argc, char *argv[])
     vt.load_test(argv[2]);
     vt.process_models();
     vt.save_results(argv[3]);
+    cout << "done." << endl;
 }

@@ -17,7 +17,7 @@ class Viterbi
     ~Viterbi();
 
     void predict_model();
-    int process_viterbi(HMM &, const int &);
+    double process_viterbi(HMM &, const char *);
     void process_models();
     void load_models(const char *);
     void load_test(const char *);
@@ -25,12 +25,12 @@ class Viterbi
 
   private:
     double _delta[MAX_SEQ][MAX_STATE] = {0.0};
+    double _result_prob[TEST_SIZE] = {0.0};
     char _test_data[TEST_SIZE][MAX_LINE];
     int _result_idx[TEST_SIZE] = {0};
     int _test_lines = 0.0;
     int _test_len = 0.0;
     int _model_num = 0;
-    //vector<HMM> models;
     HMM _models[MAX_MODELS];
 };
 
