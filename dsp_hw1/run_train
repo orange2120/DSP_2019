@@ -1,1 +1,1 @@
-./train 10 model_init.txt data/train_seq_01.txt model_01.txt
+./train 1 model_init.txt data/train_seq_01.txt mod_01.txt

@@ -9,6 +9,7 @@ using namespace std;
 #define MAX_TRAIN_LEN 64
 #define _MAX_SEQ 64
 
+// Baum-Welch Algorithm
 class BWalg
 {
   public:
@@ -28,7 +29,6 @@ class BWalg
 
   private:
     HMM *hmm;
-    char _train_data[TRAIN_SIZE][_MAX_SEQ];
     int _train_len = 0;
     int _train_lines = 0;
     double _alpha[_MAX_SEQ][MAX_STATE] = {0.0};
@@ -40,6 +40,7 @@ class BWalg
     double _sum_gamma_t[MAX_STATE] = {0.0};
     double _epsilon[MAX_TRAIN_LEN][MAX_STATE][MAX_STATE] = {0.0};
     double _sum_eps[MAX_STATE][MAX_STATE] = {0.0};
+    char _train_data[TRAIN_SIZE][_MAX_SEQ];
 };
 
 #endif

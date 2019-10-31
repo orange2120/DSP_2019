@@ -23,6 +23,7 @@ void BWalg::train(int iters)
     // go through iterations
     for (int i = 0; i < iters; ++i)
     {
+        reset_var();
         // go through over all the trainning data
         for (int k = 0; k < _train_lines; ++k)
         {
@@ -33,7 +34,7 @@ void BWalg::train(int iters)
             accmulate();
         }
         update_model();
-        reset_var();
+        
     }
 }
 
@@ -125,7 +126,7 @@ void BWalg::get_gamma(const char *seq)
 
         // gamma obervation
         for (int i = 0; i < hmm->state_num; ++i)
-            _gamma_obeserve[seq[t] - 'A'][i] += _gamma[i][t];
+           _gamma_obeserve[seq[t] - 'A'][i] += _gamma[i][t];
     }
 }
 
@@ -156,14 +157,14 @@ void BWalg::accmulate()
         for (int i = 0; i < hmm->state_num; ++i)
         {
             _sum_gamma[i] += _gamma[i][t];
-            _sum_gamma_t[i] = _sum_gamma[i];
+            //_sum_gamma_t[i] = _sum_gamma[i];
         }
     }
 
-  //for (int t = 0; t < _train_len; ++t)
+    for (int t = 0; t < _train_len; ++t)
         for (int i = 0; i < hmm->state_num; ++i)
-            //_sum_gamma_t[i] += _gamma[i][t];
-            _sum_gamma_t[i] += _gamma[i][_train_len - 1];
+            _sum_gamma_t[i] += _gamma[i][t];
+            // _sum_gamma_t[i] += _gamma[i][_train_len - 1];
 
     for (int i = 0; i < hmm->state_num; ++i)
         for (int j = 0; j < hmm->state_num; ++j)
