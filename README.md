@@ -23,3 +23,15 @@ $\epsilon_t(i,j):$ Temporary variable (total $T-1$, each $N{\times}N$ matrix)
 Notes:    
 $A(i,j)=\{a_{ij}\}:$ prob. of state $i{\rightarrow}j$  
 $B_{jt}=\{b_j(o_t)\}$  
+
+***Note:***  
+Accumlate interval  
+$\epsilon_t(i,j): 1{\leq}t{\leq}T-1$  
+
+### Utils
+`run_train.py`: Auto run the given iterations for trainning program
+Usage: `python3 run_train.py <iterations>`  
+`check.py`: Compare the testing result with labeled data. Returns the testing accuracy.  
+`run_iters.py`: Auto run multiple iterations. (defined in the file)  
+`run_iters_tesr.py`: Auto run multiple testing procedures. (defined in the file)  
+`check_iters.py`: The function is the same with `check.py` but for multiple iteraitons.

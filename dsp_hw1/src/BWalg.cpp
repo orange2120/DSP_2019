@@ -34,7 +34,6 @@ void BWalg::train(int iters)
             accmulate();
         }
         update_model();
-        
     }
 }
 
