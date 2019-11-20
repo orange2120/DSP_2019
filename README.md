@@ -35,3 +35,7 @@ Usage: `python3 run_train.py <iterations>`
 `run_iters.py`: Auto run multiple iterations. (defined in the file)  
 `run_iters_tesr.py`: Auto run multiple testing procedures. (defined in the file)  
 `check_iters.py`: The function is the same with `check.py` but for multiple iteraitons.
+
+## HW#2-1 Automatic Speech Recognition of Mandarin Digits
+
+## HW#3 ZhuYin Decoding
