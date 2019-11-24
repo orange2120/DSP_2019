@@ -4,7 +4,7 @@ INC_PATH ?= inc
 SRC_PATH ?= src
 
 CXX = g++
-CXXFLAGS = -O2 -I$(SRIPATH)/include -I$(INC_PATH)
+CXXFLAGS = -O2 -I$(SRIPATH)/include -I$(INC_PATH) -std=c++11
 vpath lib%.a $(SRIPATH)/lib/$(MACHINE_TYPE)
 vpath %.c $(SRC_PATH)
 vpath %.cpp $(SRC_PATH)
@@ -27,6 +27,7 @@ all: $(TARGET)
 map:
 	@#TODO
 	@#python3 mapping.py $(FROM) $(TO)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
 	$(RM) $(OBJ) $(TARGET)
