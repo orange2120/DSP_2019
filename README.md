@@ -39,3 +39,11 @@ Usage: `python3 run_train.py <iterations>`
 ## HW#2-1 Automatic Speech Recognition of Mandarin Digits
 
 ## HW#3 ZhuYin Decoding
+
+### ZhuYin to Big5 mapping
+How to store Big5 characters?
+Every Big5 character is 2 byte, store it in uint16_t
+Ex:
+```cpp
+uint16_t ch = (c[0] << 8) + c[1];
+```
