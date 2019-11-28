@@ -4,7 +4,7 @@ INC_PATH ?= inc
 SRC_PATH ?= src
 
 CXX = g++
-CXXFLAGS = -O2 -I$(SRIPATH)/include -I$(INC_PATH) -std=c++11
+CXXFLAGS = -O2 -std=c++11 -Wall -I$(SRIPATH)/include -I$(INC_PATH)
 CXXFLAGS_MAP = -Wall -O2 -std=c++11
 CXXFLAGS_MAP_DBG = -Wall -g -std=c++11
 vpath lib%.a $(SRIPATH)/lib/$(MACHINE_TYPE)
@@ -20,13 +20,16 @@ FROM ?= Big5-ZhuYin.map
 TO ?= ZhuYin-Big5.map
 .PHONY: all clean map
 
-$(TARGET): $(OBJ) -loolm -ldstruct -lmisc
+all: disamb.o $(TARGET)
+
+$(TARGET): $(OBJ) disamb.o -loolm -ldstruct -lmisc
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
-all: $(TARGET)
+disamb.o: src/disamb.h src/disamb.cpp
+	$(CXX) $(CXXFLAGS) -c src/disamb.h src/disamb.cpp
 
 map: src/map.cpp
 	@#TODO

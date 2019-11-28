@@ -1,5 +1,6 @@
 #include <iostream>
-#include "../inc/disamb.h"
+#include "disamb.h"
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -13,8 +14,8 @@ int main(int argc, char* argv[])
 	
 	disamb dis;
 	dis.readSeg(argv[1]);
-	dis.readZYB(argv[2]);
+	dis.readMapping(argv[2]);
 	dis.readLM(argv[3]);
 
-	dis.writeFile(argv[5]);
+	// dis.writeFile(argv[5]);
 }
