@@ -13,9 +13,7 @@ int main(int argc, char* argv[])
 	}
 	
 	disamb dis;
-	dis.readSeg(argv[1]);
 	dis.readMapping(argv[2]);
 	dis.readLM(argv[3]);
-
-	// dis.writeFile(argv[5]);
+	dis.processing(argv[1], argv[4]);
 }

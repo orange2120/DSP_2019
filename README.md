@@ -41,9 +41,57 @@ Usage: `python3 run_train.py <iterations>`
 ## HW#3 ZhuYin Decoding
 
 ### ZhuYin to Big5 mapping
+
+#### map
 How to store Big5 characters?
-Every Big5 character is 2 byte, store it in uint16_t
-Ex:
+Every Big5 character is 2 byte, store it in `uint16_t`
 ```cpp
-uint16_t ch = (c[0] << 8) + c[1];
+uint16_t ch = ((uint16_t)x << 8) | (uint16_t)(y & 0xFF);
 ```
+
+### mydisambig
+Mapping 注音 character back to 中文字
+
+Example:
+```
+讓 他 十 分 ㄏ 怕
+            ↓
+讓 他 十 分 害 怕
+```
+
+Store Big5 characters in `string` type.
+
+`q_{t}`: state at time `t`
+
+Viterbi process:
+
+Since every Big5 character has different numbers of possible states, we need capacity-flexible array to store states.
+
+→ Using vector<string> array, for example:
+```
+覺 → 覺
+ㄉ → 八 匕 卜 不 卞 巴 比 丙...
+她 → 她
+ㄉ → 丁 刀 刁 大 丹 仃 弔 斗...
+ㄅ → 八 匕 卜 不 卞 巴 比 丙...
+現 → 現
+很 → 很
+棒 → 棒
+```
+Perform Viterbi algorithm on bigram probability of each Chinese character.
+
+#### Initialization
+$\delta(i,j)$
+
+Record the index of maximum probability at time `t` in the `map`.
+
+#### backtracking
+Find the maximum probability path
+
+***NOTE***
+The probability derivated from `LM` is expressed in logrithm. Use addition instead of multiplication.
+
+#### Tools
+`run_all_my.sh`: Run all the test text file from 1~10 for `mydisambig` and output the results.  
+`run_all_ref.sh`: Similar to  `run_all_my.sh` but for srilm `disambig`.  
+`diff_res.sh`: Run `diff` between my results and reference results.  

@@ -6,8 +6,6 @@
 #include <unordered_map>
 #include <vector>
 #include "Ngram.h"
-#include "Vocab.h"
-#include "File.h"
 
 using namespace std;
 
@@ -19,19 +17,17 @@ class disamb
     disamb();
     ~disamb();
 
-    double getBiGProb(const char *, const char *);
-    void Viterbi(string &);
-    void processing();
-    bool readSeg(const char *);
+    inline double getBiGProb(const char *, const char *);
+    string Viterbi(string &);
+    bool processing(const char *, const char *);
     bool readMapping(const char *);
     bool readLM(const char *);
-    bool writeFile(const char *);
 
   private:
     Vocab _voc;
-    Ngram *_lm;
+    Ngram *_lm; // language model
     unordered_map<string, vector<string> *> _map;
-    double _delta**;
+    unsigned _nState = 0; // number of states, including ZhuYin and Chinese zharacters
 };
 
 #endif // __DISAMB_H__

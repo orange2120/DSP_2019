@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 
     uint16_t zhuYinMap[37];
     unordered_map<uint16_t, vector<uint16_t>*> zhuYins;
+    unordered_map<uint16_t, bool> chMap;
 
     // Fill the zhuYin map from ㄅ to ㄦ
     for (uint16_t i = 0; i < 11; ++i)
@@ -75,7 +76,7 @@ int main(int argc, char* argv[])
         char *pch = strchr(input, ' ');
         char *poYin = NULL;
         pch++; // move pointer next to ' '
-        uint16_t z = BIG2UINT(*(pch), *(pch + 1)); // get zhuYin capital
+        uint16_t z = BIG2UINT(*(pch), *(pch + 1)); // get first zhuYin
 
         vector<uint16_t> *v = zhuYins[z]; // get zhuYin array
         v->push_back(BIG2UINT(input[0], input[1])); // push BIG5 character into vector
@@ -85,7 +86,7 @@ int main(int argc, char* argv[])
         {
             poYin++; // get character next to "/"
             pch = poYin;
-            uint16_t po = BIG2UINT(*poYin, *(poYin + 1));
+            uint16_t po = BIG2UINT(*poYin, *(poYin + 1)); // check if the ZhuYin is repeated
 
             if (z != po)
             {
@@ -105,11 +106,17 @@ int main(int argc, char* argv[])
             continue;
 
         ofs << (char)(zy >> 8) << (char)zy << " ";
-        for (uint16_t j = 0; j < vec->size(); ++j)
+        for (uint16_t j = 0; j < vec->size(); ++j) // output ZhuYin part
             ofs << (char)(vec->at(j) >> 8) << (char)vec->at(j) << " ";
         ofs << endl;
-        for (uint16_t j = 0; j < vec->size(); ++j)
+        for (uint16_t j = 0; j < vec->size(); ++j) // output Chinese word part
+        {
+            if (chMap.find(vec->at(j)) != chMap.end()) // omitt repeated characters
+                continue;
+            chMap[vec->at(j)] = 1;
+
             ofs << (char)(vec->at(j) >> 8) << (char)vec->at(j) << " " << (char)(vec->at(j) >> 8) << (char)vec->at(j) << endl;
+        }
     }
     ofs.close();
 }
