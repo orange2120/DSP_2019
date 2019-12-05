@@ -50,9 +50,10 @@ map: src/map.cpp
 	@#TODO
 	@#python3 mapping.py $(FROM) $(TO)
 	$(CXX) $(CXXFLAGS_MAP) $(OPTFLAGS) -o $@ $^
+	./map $(FROM) $(TO)
 
 map_dbg: src/map.cpp
 	$(CXX) $(CXXFLAGS_MAP) $(DBGFLAGS) -o $@ $^
 
 clean:
-	$(RM) $(TARGET) $(DBG_TARGET) $(MAP_TARGET) src/*.o *.o
+	$(RM) $(TARGET) $(DBG_TARGET) $(MAP_TARGET) $(SRC_PATH)/*.o *.o $(INC_PATH)/*.gch

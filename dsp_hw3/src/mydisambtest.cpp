@@ -1,21 +1,80 @@
-#include "disamb.h"
+#include "Ngram.h"
 
-disamb::disamb()
-{
-	_lm = new Ngram(_voc, NGRAM_ORDER);
-}
+#include <iostream>
+#include <fstream>
+#include <unordered_map>
+#include <vector>
 
-disamb::~disamb()
+using namespace std;
+
+#define NGRAM_ORDER 2 // for bigram encoding
+#define MIN_PROB -1e12
+
+inline double getBiGProb(const char *, const char *);
+string Viterbi(string &);
+
+Vocab _voc;
+Ngram _lm(_voc, NGRAM_ORDER); // language model
+unordered_map<string, vector<string> *> map;
+
+int main(int argc, char* argv[])
 {
-	// clean the map
-	unordered_map<string, vector<string> *>::iterator it;
-	for (it = _map.begin(); it != _map.end(); ++it)
-		delete it->second;
-	delete _lm;
+	if (argc != 5)
+	{
+		cerr << "[ERROR] Invalid parameters!\n";
+		cerr << "Usage: ./mydisambig <segemented file> <ZhuYin-Big5 mapping> <language model> <output file>\n";
+		exit(-1);
+	}
+
+    
+
+    ifstream fmap(argv[2]);
+	if (!fmap.is_open())
+		return 0;
+
+	vector<string> *v;
+	string input;
+	while (getline(fmap, input, '\n'))
+	{
+		uint32_t len = input.size();
+		v = new vector<string>;
+		map.insert(pair<string, vector<string> *>(input.substr(0, 2), v)); // build map, the first character as key
+
+		for (uint32_t i = 2; i < len; i++) // read after second character
+		{
+			if (input[i] != ' ')
+			{
+				v->push_back(input.substr(i, 2));
+				i += 2;
+			}
+		}
+	}
+    fmap.close();
+
+    File fp_lm(argv[3], "r");
+	if (fp_lm.error())
+		return 0;
+	_lm.read(fp_lm);
+	fp_lm.close();
+
+    ifstream ifs(argv[1]);
+	ofstream ofs(argv[4]);
+	if (!ifs.is_open() || !ofs.is_open())
+		return false;
+
+	string str = "";
+	while (getline(ifs, str, '\n'))
+	{
+		ofs << "<s>" << Viterbi(str) << "</s>" << endl;
+	}
+
+	ifs.close();
+	ofs.close();
+
 }
 
 // get bigram probability, P(w1|w2)
-inline double disamb::getBiGProb(const char* w1, const char* w2)
+inline double getBiGProb(const char* w1, const char* w2)
 {
 	VocabIndex wid1 = _voc.getIndex(w1);
 	VocabIndex wid2 = _voc.getIndex(w2);
@@ -24,11 +83,11 @@ inline double disamb::getBiGProb(const char* w1, const char* w2)
     if(wid2 == Vocab_None)
         wid2 = _voc.getIndex(Vocab_Unknown);
 	VocabIndex context[] = { wid1, Vocab_None };
-	return _lm->wordProb(wid2, context);
+	return _lm.wordProb(wid2, context);
 }
 
 // Viterbi algorithm
-string disamb::Viterbi(string &str)
+string Viterbi(string &str)
 {
 	uint32_t len = 2; // variable "t", that is, length of big5 string / 2 + 2 (<s> + input + </s>)
 	uint32_t maxIdx = 0;
@@ -36,18 +95,18 @@ string disamb::Viterbi(string &str)
 	LogP maxProb = MIN_PROB;
 	vector<vector<string> *> input_map;
 	input_map.reserve(100);
-	input_map.push_back(_map["<s>"]); // add <s> to the first of the string
+	input_map.push_back(map["<s>"]); // add <s> to the first of the string
 	// split string and store into big5 character array
 	for (unsigned i = 0; i < str.length(); ++i)
 	{
 		if (str[i] != ' ')
 		{
-			input_map.push_back(_map[str.substr(i, 2)]);
+			input_map.push_back(map[str.substr(i, 2)]);
 			len++;
 			i += 2;
 		}
 	}
-	input_map.push_back(_map["</s>"]);  // add </s> to the last of the string
+	input_map.push_back(map["</s>"]);  // add </s> to the last of the string
 
 	string result = "";
 	vector<vector<uint32_t>> state(len);
@@ -103,73 +162,4 @@ string disamb::Viterbi(string &str)
 		result += out_v[t] + " "; // concatenate characters
 
 	return result;
-}
-
-// read segmented text file line by line,
-// runnging Viterbi process
-// write decoded result to output file
-bool disamb::processing(const char *ifName, const char* ofName)
-{
-	ifstream ifs(ifName);
-	ofstream ofs(ofName);
-	if (!ifs.is_open() || !ofs.is_open())
-		return false;
-
-	string str = "";
-	while (getline(ifs, str, '\n'))
-	{
-		ofs << "<s>" << Viterbi(str) << "</s>" << endl;
-	}
-
-	ifs.close();
-	ofs.close();
-	return true;
-}
-
-// read Zhu Yin-to-Big5 file into hash table
-bool disamb::readMapping(const char* filename)
-{
-	ifstream ifs(filename);
-	if (!ifs.is_open())
-		return false;
-
-	vector<string> *v;
-	string input;
-	while (getline(ifs, input, '\n'))
-	{
-		uint32_t len = input.size();
-		v = new vector<string>;
-		_map.insert(pair<string, vector<string> *>(input.substr(0, 2), v)); // build map, the first character as key
-
-		for (uint32_t i = 2; i < len; i++) // read after second character
-		{
-			if (input[i] != ' ')
-			{
-				v->push_back(input.substr(i, 2));
-				i += 2;
-			}
-		}
-	}
-
-	v = new vector<string>;
-	v->push_back("<s>");
-	_map.insert(pair<string, vector<string> *>("<s>", v));
-	v = new vector<string>;
-	v->push_back("</s>");
-	_map.insert(pair<string, vector<string> *>("</s>", v));
-
-	ifs.close();
-	return true;
-}
-
-// read language model
-bool disamb::readLM(const char* filename)
-{
-	File fp_lm(filename, "r");
-
-	if (fp_lm.error())
-		return false;
-	_lm->read(fp_lm);
-	fp_lm.close();
-	return true;
 }

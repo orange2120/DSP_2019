@@ -43,7 +43,7 @@ Usage: `python3 run_train.py <iterations>`
 ### ZhuYin to Big5 mapping
 
 #### map
-How to store Big5 characters?
+How to store Big5 characters?  
 Every Big5 character is 2 byte, store it in `uint16_t`
 ```cpp
 uint16_t ch = ((uint16_t)x << 8) | (uint16_t)(y & 0xFF);
@@ -89,9 +89,11 @@ Record the index of maximum probability at time `t` in the `map`.
 Find the maximum probability path
 
 ***NOTE***
-The probability derivated from `LM` is expressed in logrithm. Use addition instead of multiplication.
+The probability derivated from `LM` is expressed in logrithm. Use addition instead of multiplication.  
 
 #### Tools
+`generate_lm.sh`: Generate the language model from `ngram-count`   
+`sep_testdata.sh`: Run the word separation script `separator_big5.pl` on test file 1~10.  
 `run_all_my.sh`: Run all the test text file from 1~10 for `mydisambig` and output the results.  
 `run_all_ref.sh`: Similar to  `run_all_my.sh` but for srilm `disambig`.  
 `diff_res.sh`: Run `diff` between my results and reference results.  

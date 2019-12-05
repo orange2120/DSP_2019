@@ -10,6 +10,7 @@
 using namespace std;
 
 #define NGRAM_ORDER 2 // for bigram encoding
+#define MIN_PROB -1e12
 
 class disamb
 {
@@ -27,7 +28,6 @@ class disamb
     Vocab _voc;
     Ngram *_lm; // language model
     unordered_map<string, vector<string> *> _map;
-    unsigned _nState = 0; // number of states, including ZhuYin and Chinese zharacters
 };
 
 #endif // __DISAMB_H__
