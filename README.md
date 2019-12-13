@@ -1,5 +1,5 @@
 # 2019 DSP Homework
-2019 Fall, Digital Speech Processing
+2019 Fall, NTUEE, Digital Speech Processing
 
 ## HW#1 Discrete Hidden Markov Model
 Implementing Discrete Hidden Markov Model
@@ -97,3 +97,7 @@ The probability derivated from `LM` is expressed in logrithm. Use addition inste
 `run_all_my.sh`: Run all the test text file from 1~10 for `mydisambig` and output the results.  
 `run_all_ref.sh`: Similar to  `run_all_my.sh` but for srilm `disambig`.  
 `diff_res.sh`: Run `diff` between my results and reference results.  
+
+
+## Final Project
+[Note](https://hackmd.io/@q3EMTZQBRcapvN2T2DzWxA/ByRKwXb0S)
