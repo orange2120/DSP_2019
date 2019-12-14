@@ -1,5 +1,6 @@
 .vscode/
 __pycache__
+final/output/
 
 .o
 .h.gch
