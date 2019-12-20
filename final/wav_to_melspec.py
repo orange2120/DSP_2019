@@ -24,7 +24,7 @@ def plot_melspec(spec, sr, hop_len, transposed=True, fmin=20, fmax=8000, show=Fa
   return
 
 def read_wav(wav_path, sr, duration=None, mono=True):
-  wav, sr = librosa.load(TEST_WAV_PATH, sr=sr, duration=duration, mono=mono)
+  wav, sr = librosa.load(wav_path, sr=sr, duration=duration, mono=mono)
   return wav
 
 def preemphasis(wav, alpha=0.97):
