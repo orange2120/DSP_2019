@@ -61,6 +61,7 @@ if __name__ == '__main__':
   y_melspec = wav_to_melspec(y, SR, 400, 160, fmin=20, fmax=8000, transpose=True)
   print (y_melspec.shape)
 
+<<<<<<< HEAD
   if saveFile:
     print(SPEC_DIR_PATH + os.path.basename(WAV_PATH) + '.msg.pkl')
     pickle.dump(y_melspec, open(SPEC_DIR_PATH + '/' + os.path.basename(WAV_PATH) + '.msg.pkl', 'wb'))
@@ -68,3 +69,6 @@ if __name__ == '__main__':
   else:
     plot_wav(y, SR, show=True)
     plot_melspec(y_melspec, SR, 160, transposed=True, show=True)
+=======
+  plot_melspec(y_melspec, SR, 160, transposed=True, show=True)
+>>>>>>> 675ad32d439aa65b900949206f57b65cec57ec77
