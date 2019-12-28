@@ -3,14 +3,14 @@ import numpy as np
 from sklearn.utils import shuffle
 
 class BatchGenerator(object):
-  def __init__(self, dataframe, is_train, batch_size, normalize=True, n_mels=128, conv_factor=4):
+  def __init__(self, dataframe, is_train, batch_size, normalize=True, n_mels=128, conv_factor=8):
     self.is_train = is_train
     self.df = dataframe.copy()
     self.batch_size = batch_size
 
     self.melspec_path = self.df['melspec_path'].tolist()
-    self.melspec_len = self.phone_seq_str_to_list( self.df['melspec_len'].tolist() )
-    self.phone_seq = self.df['phone_seq'].tolist()
+    self.melspec_len = self.df['melspec_len'].tolist()
+    self.phone_seq = self.phone_seq_str_to_list( self.df['phone_seq'].tolist() )
     self.phone_seq_len = self.df['phone_seq_len'].tolist()
     self.num_samples = len( self.melspec_path )
 
@@ -79,10 +79,10 @@ class BatchGenerator(object):
     if spec.shape[0] < padlen:
       if self.normalize:
         zero_pad = np.zeros( (padlen - spec.shape[0], spec.shape[1]) )
-        spec = np.vstack(spec, zero_pad)
+        spec = np.vstack( (spec, zero_pad) )
       else:
         min_pad = np.full( (padlen - spec.shape[0], spec.shape[1]), np.min(spec) )
-        spec = np.vstack(spec, min_pad)
+        spec = np.vstack( (spec, min_pad) )
 
     assert ( spec.shape == (padlen, self.n_mels) )
 
