@@ -1,4 +1,4 @@
-import ast
+import ast, pickle
 import numpy as np
 from sklearn.utils import shuffle
 
@@ -33,6 +33,10 @@ class BatchGenerator(object):
     assert ( batch_x_melspec.shape == (cur_batch_size, max(batch_x_lens), self.n_mels) )
 
     batch_y_seq = np.array( self.pad_phone_seq(batch_y_seq, max(batch_y_lens)+1) )
+    print("BYS.s", end='')
+    print(batch_y_seq.shape)
+    print("bat.l", end='')
+    print(max(batch_y_lens)+1)
     assert ( batch_y_seq.shape == (cur_batch_size, max(batch_y_lens)+1) )
 
     batch_x_lens = np.ceil( np.array(batch_x_lens) / self.conv_factor ) - 2
@@ -65,13 +69,15 @@ class BatchGenerator(object):
       batch = self.get_batch(self.cur_idx)
       self.cur_idx += 1
 
+      print (self.cur_idx)
       yield batch
 
   def phone_seq_str_to_list(self, phone_seq_strs):
     return [ast.literal_eval(p_seq) for p_seq in phone_seq_strs]
 
   def load_melspectrogram(self, spec_file, padlen):
-    spec = np.load(spec_file)
+    spec = pickle.load( open(spec_file, 'rb') )
+    spec = np.array(spec)
 
     if self.normalize:
       spec = (spec - np.min(spec)) / ( np.max(spec) - np.min(spec) + 1e-12 )

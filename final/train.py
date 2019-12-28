@@ -21,6 +21,7 @@ def load_phone_tokenizer(tkn_path):
   return tkn
 
 if __name__ == '__main__':
+  # ../../dataset_4000/data_info_train.csv ../../dataset_4000/data_info_val.csv ./pickle/phone_tokenizer.pkl
   train_df, val_df = read_data_df(sys.argv[1]), read_data_df(sys.argv[2])
   phone_tokenizer = load_phone_tokenizer(sys.argv[3])
   lr = float( sys.argv[4] )
@@ -41,7 +42,7 @@ if __name__ == '__main__':
   model.fit_generator(
     generator=train_btgen.next_batch(),
     steps_per_epoch=ceil( train_btgen.num_samples / bt_size ),
-    epochs=1,
+    epochs=100,
     validation_data=val_btgen.next_batch(),
     validation_steps=ceil( val_btgen.num_samples / bt_size ),
   )

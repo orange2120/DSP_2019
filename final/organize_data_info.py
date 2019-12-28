@@ -3,12 +3,29 @@ import numpy as np
 import pickle, os
 from sklearn.model_selection import train_test_split
 
-def build_dataset_df(spectrogram_dir, phone_seqs_pkl_path, sortagrad=True, save=False, save_dir=None, train_val_split=False, val_size=None):
+def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False, save_dir=None, train_val_split=False, val_size=None):
   df_final = pd.DataFrame()
 
   spec_files = os.listdir(spectrogram_dir)
+  phone_files = os.listdir(phone_seqs_dir)
+  assert ( len(spec_files) == len(phone_files) )
+
+  spec_files = sorted(spec_files)
+  phone_files = sorted(phone_files)
+  print (spec_files[:10])
+  print (phone_files[:10])
+
+  for i in range( len(spec_files) ):
+    print (spec_files[i].split('.wav')[0], phone_files[i].split('.wav')[0])
+    assert ( spec_files[i].split('.wav')[0] == phone_files[i].split('.wav')[0] )
+
   spec_files = [spectrogram_dir + '/' + spec_fp for spec_fp in spec_files]
-  phone_seqs = pickle.load(open(phone_seqs_pkl_path, 'rb'))
+  phone_files = [phone_seqs_dir + '/' + phone_fp for phone_fp in phone_files]
+  assert ( len(spec_files) == len(phone_files) )
+
+  phone_seqs = []
+  for phone_fp in phone_files:
+    phone_seqs.append( pickle.load( open(phone_fp, 'rb') )[0] )
   assert ( len(spec_files) == len(phone_seqs) )
 
   df_final['melspec_path'] = spec_files
@@ -16,7 +33,7 @@ def build_dataset_df(spectrogram_dir, phone_seqs_pkl_path, sortagrad=True, save=
 
   melspec_lens = []
   for melspec in spec_files:
-    melspec_lens.append( np.load(melspec).shape[0] )
+    melspec_lens.append( len( pickle.load(open(melspec, 'rb')) ) )
   df_final['melspec_len'] = melspec_lens
 
   phone_seq_lens = []
@@ -50,9 +67,9 @@ def build_dataset_df(spectrogram_dir, phone_seqs_pkl_path, sortagrad=True, save=
 
 if __name__ == '__main__':
   build_dataset_df(
-    './tiny_4096/melspec', 
-    './tiny_4096/phone_seq/phone_seqs.pkl', 
-    save=True, save_dir='./tiny_4096/',
+    '../../dataset_4000/spectrogram', 
+    '../../dataset_4000/phoneme/', 
+    save=True, save_dir='../../dataset_4000/',
     train_val_split=True,
     val_size=0.125
   )
