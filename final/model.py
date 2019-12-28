@@ -8,13 +8,14 @@ from keras.layers import ReLU
 
 def ctc_loss_fctn(args):
   y_pred, y_true, pred_len, label_len = args
-  return K.ctc_batch_cost(y_true, y_pred, label_len, pred_len)
+  return K.ctc_batch_cost(y_true, y_pred[:, 2:, :], pred_len, label_len)
 
 def ds2_model(phone_classes, freq_dim=128, fc_size=1024, rnn_size=512, rnn_layers=3):
   melspec_input = Input(shape=(None, freq_dim), name='melspec_input')
   x = Lambda(lambda x: K.expand_dims(x))(melspec_input)
   print (x.shape)
 
+  x = Conv2D(filters=32, kernel_size=(11, 32), strides=(2, 2), padding='same', activation='relu', name='conv2d_1')(x)
   x = Conv2D(filters=32, kernel_size=(11, 16), strides=(2, 2), padding='same', activation='relu', name='conv2d_2')(x)
   x = Conv2D(filters=96, kernel_size=(7, 16), strides=(2, 2), padding='same', activation='relu', name='conv2d_3')(x)
   print (x.shape)
@@ -40,4 +41,4 @@ def ds2_model(phone_classes, freq_dim=128, fc_size=1024, rnn_size=512, rnn_layer
 
 if __name__ == '__main__':
   model = ds2_model(219)
-  print (model.summary())
+  model.summary()
