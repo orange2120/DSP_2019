@@ -1,5 +1,6 @@
 import ast, pickle
 import numpy as np
+from copy import deepcopy
 from sklearn.utils import shuffle
 
 class BatchGenerator(object):
@@ -24,7 +25,7 @@ class BatchGenerator(object):
     cur_batch_size = min(self.batch_size, self.num_samples - (self.batch_size * idx) )
     batch_x = self.melspec_path[ self.batch_size * idx : self.batch_size * (idx+1) ]
     batch_x_lens = self.melspec_len[ self.batch_size * idx : self.batch_size * (idx+1) ]
-    batch_y_seq = self.phone_seq[ self.batch_size * idx : self.batch_size * (idx+1) ]
+    batch_y_seq = deepcopy( self.phone_seq[ self.batch_size * idx : self.batch_size * (idx+1) ] )
     batch_y_lens = self.phone_seq_len[ self.batch_size * idx : self.batch_size * (idx+1) ]
 
     batch_x_melspec = np.array( 
@@ -33,10 +34,6 @@ class BatchGenerator(object):
     assert ( batch_x_melspec.shape == (cur_batch_size, max(batch_x_lens), self.n_mels) )
 
     batch_y_seq = np.array( self.pad_phone_seq(batch_y_seq, max(batch_y_lens)+1) )
-    print("BYS.s", end='')
-    print(batch_y_seq.shape)
-    print("bat.l", end='')
-    print(max(batch_y_lens)+1)
     assert ( batch_y_seq.shape == (cur_batch_size, max(batch_y_lens)+1) )
 
     batch_x_lens = np.ceil( np.array(batch_x_lens) / self.conv_factor ) - 2
