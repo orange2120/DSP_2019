@@ -66,7 +66,6 @@ class BatchGenerator(object):
       batch = self.get_batch(self.cur_idx)
       self.cur_idx += 1
 
-      print (self.cur_idx)
       yield batch
 
   def phone_seq_str_to_list(self, phone_seq_strs):
