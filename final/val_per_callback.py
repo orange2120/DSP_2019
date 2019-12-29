@@ -13,6 +13,8 @@ class ValPERCallback(Callback):
     self.val_gen = val_gen
     self.mean_per_log = []
     self.mean_val_per_log = []
+    self.shuffle = True
+    self.train_eval_samples = 1024
 
   def on_train_begin(self, logs={}):
     if 'mean_per' not in self.params['metrics']:
@@ -27,6 +29,10 @@ class ValPERCallback(Callback):
 
   def on_epoch_end(self, epoch, logs={}):
     K.set_learning_phase(0)
+
+    if self.shuffle:
+      self.train_gen.shuffle_dataset()
+    
     train_per, val_per = self.calc_per_epoch_end()
     logs['mean_per'], logs['val_mean_per'] = train_per, val_per
     K.set_learning_phase(1)
@@ -42,7 +48,7 @@ class ValPERCallback(Callback):
     train_avg_per = 0.0
     val_avg_per = 0.0
 
-    train_n_batches = ceil( self.train_gen.num_samples / self.train_gen.batch_size )
+    train_n_batches = ceil( self.train_eval_samples / self.train_gen.batch_size )
     val_n_batches = ceil( self.val_gen.num_samples / self.val_gen.batch_size )
 
     for b in range(train_n_batches):
@@ -75,8 +81,10 @@ class ValPERCallback(Callback):
 
       val_avg_per = aggregate_per_avg(batch_n_samples, val_sent_cnt, batch_per_tot / batch_n_samples, val_avg_per)
     
-    print ('Train Avg PER --', 100 * train_avg_per, '%%')
-    print ('Val Avg PER --', 100 * val_avg_per, '%%')
+    print ('Train #samples --', train_sent_cnt)
+    print ('Val #samples --', val_sent_cnt)
+    print ('Train Avg PER --', 100 * train_avg_per, '%')
+    print ('Val Avg PER --', 100 * val_avg_per, '%')
 
     self.mean_per_log.append( train_avg_per )
     self.mean_val_per_log.append( val_avg_per )
@@ -90,11 +98,18 @@ def aggregate_per_avg(bt_size, all_size, bt_per, all_per):
 def calc_per_single(pred_seq, true_seq):
   pred_seq = pred_seq.tolist()
   true_seq = true_seq.tolist()
+  # print ('true ori:', true_seq)
+  # print ('pred ori:', pred_seq)
 
   pred_seq = pred_seq[ : rindex(pred_seq, 0) + 1 ]
   true_seq = true_seq[ : true_seq.index(0) + 1 ]
+  PER = float(levenshtein.distance(pred_seq, true_seq)) / float( len(true_seq) )
+  # print ('true:', true_seq)
+  # print ('pred:', pred_seq)
+  # print ('PER: ', PER)
+  # print ('===============================================')
 
-  return float(levenshtein.distance(pred_seq, true_seq)) / float( len(true_seq) )
+  return PER
 
 def rindex(arr, val):
   try:

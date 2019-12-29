@@ -1,0 +1,2 @@
+python3 train.py ../../dataset_train/data_info.csv ../../dataset_dev/data_info.csv ./pickle/phone_tokenizer.pkl 5e-4 64
+

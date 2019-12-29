@@ -23,12 +23,16 @@ def main():
     while fnameline:
         # print(fnameline)
         fnameline = fnameline.rstrip() # remove '\n'
+        print (fnameline)
 
         seq_list = []
-        seq_list.append(linecache.getline(fnameline, phoneme_line))
-        # print(seq_list)
+        with open(fnameline, 'r') as f:
+            seq_list.append( f.readlines()[ phoneme_line - 1 ].rstrip() )
+    
+        print(seq_list)
         output = ptk.text_to_seqs(seq_list)
-        print(os.path.basename(fnameline))
+        print (output)
+        # print(os.path.basename(fnameline))
         pickle.dump(output, open(IDX_OUTPUT_DIR + '/'  + os.path.basename(fnameline) + '.pkl', 'wb'))
 
         fnameline = fp.readline()

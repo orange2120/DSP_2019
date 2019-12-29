@@ -22,7 +22,7 @@ def load_phone_tokenizer(tkn_path):
   return tkn
 
 if __name__ == '__main__':
-  train_df, val_df = read_data_df(sys.argv[1])[:300], read_data_df(sys.argv[2])[:120]
+  train_df, val_df = read_data_df(sys.argv[1]), read_data_df(sys.argv[2])
   phone_tokenizer = load_phone_tokenizer(sys.argv[3])
   lr = float( sys.argv[4] )
   bt_size = int( sys.argv[5] )

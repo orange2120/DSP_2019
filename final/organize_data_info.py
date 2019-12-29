@@ -67,9 +67,15 @@ def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False
 
 if __name__ == '__main__':
   build_dataset_df(
-    '../../dataset_4000/spectrogram', 
-    '../../dataset_4000/phoneme/', 
-    save=True, save_dir='../../dataset_4000/',
-    train_val_split=True,
-    val_size=0.125
+    '../../dataset_train/spectrogram', 
+    '../../dataset_train/phoneme/', 
+    save=True, save_dir='../../dataset_train/',
+    train_val_split=False
+  )
+
+  build_dataset_df(
+    '../../dataset_dev/spectrogram', 
+    '../../dataset_dev/phoneme/', 
+    save=True, save_dir='../../dataset_dev/',
+    train_val_split=False
   )
