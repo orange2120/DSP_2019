@@ -9,6 +9,9 @@ phoneme_line = 3
 
 
 def main():
+    
+    if len(sys.argv) != 1:
+        IDX_OUTPUT_DIR = sys.argv[2]
 
     with open(TOKENIZER_PKL_PATH, 'rb') as p:
         ptk = pickle.load(p)
@@ -25,8 +28,8 @@ def main():
         seq_list.append(linecache.getline(fnameline, phoneme_line))
         # print(seq_list)
         output = ptk.text_to_seqs(seq_list)
-        # print(os.path.basename(fnameline))
-        pickle.dump(output, open(IDX_OUTPUT_DIR + os.path.basename(fnameline) + '.pkl', 'wb'))
+        print(os.path.basename(fnameline))
+        pickle.dump(output, open(IDX_OUTPUT_DIR + '/'  + os.path.basename(fnameline) + '.pkl', 'wb'))
 
         fnameline = fp.readline()
     
