@@ -9,6 +9,7 @@ from math import ceil
 from batch_generator import BatchGenerator
 from model import ds2_model
 from val_per_callback import ValPERCallback
+from keras.callbacks import ModelCheckpoint
 
 def read_data_df(csv_path):
   df = pd.read_csv(csv_path, encoding='utf-8')
@@ -26,6 +27,11 @@ if __name__ == '__main__':
   phone_tokenizer = load_phone_tokenizer(sys.argv[3])
   lr = float( sys.argv[4] )
   bt_size = int( sys.argv[5] )
+  model_save_dir = sys.argv[6]
+
+  model_weights_dir = model_save_dir + 'weights/'
+  if not os.path.exists(model_weights_dir):
+    os.mkdir(model_weights_dir)
 
   train_btgen = BatchGenerator(train_df, is_train=True, batch_size=bt_size)
   val_btgen = BatchGenerator(val_df, is_train=False, batch_size=bt_size)
@@ -47,13 +53,17 @@ if __name__ == '__main__':
   top_k_decoded, _ = K.ctc_decode(y_pred, pred_len, greedy=False, beam_width=10)
   decode_fctn = K.function([melspec_input, pred_len], [top_k_decoded[0]])
 
-  val_cb = ValPERCallback(decode_fctn, train_btgen, val_btgen)
-
+  val_cb = ValPERCallback(decode_fctn, train_btgen, val_btgen, model_save_dir)
+  
+  print ('Training on {} samples / Validating on {} samples ...'.format(train_btgen.num_samples, val_btgen.num_samples))
   model.fit_generator(
     generator=train_btgen.next_batch(),
     steps_per_epoch=ceil( train_btgen.num_samples / bt_size ),
-    epochs=20,
+    epochs=3,
     validation_data=val_btgen.next_batch(),
     validation_steps=ceil( val_btgen.num_samples / bt_size ),
-    callbacks=[val_cb]
+    callbacks=[
+      val_cb,
+      ModelCheckpoint(model_weights_dir + 'epo{epoch:02d}-val_loss{val_loss:.2f}.h5', save_weights_only=True)
+    ]
   )
