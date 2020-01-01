@@ -23,3 +23,18 @@ class PhoneTokenizer(object):
       idx_seqs.append( sent_to_idx )
       
     return idx_seqs
+
+  def seqs_to_text(self, seq_arr):
+    phone_sents = []
+
+    for seq in seq_arr:
+      phones = []
+
+      for idx in seq:
+        ph = self.idx_to_phone[idx] if idx in self.idx_to_phone else None
+        if ph is not None:
+          phones.append( ph )
+          
+      phone_sents.append( ' '.join(phones) )
+
+    return phone_sents

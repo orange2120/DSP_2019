@@ -4,8 +4,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import keras.backend as K
 from keras.callbacks import Callback
 from math import ceil
-from textdistance import levenshtein
 import matplotlib.pyplot as plt
+from score_utils import aggregate_per_avg, calc_per_single, rindex
 
 class ValPERCallback(Callback):
   def __init__(self, decode_fctn, train_gen, val_gen, model_dir):
@@ -14,7 +14,7 @@ class ValPERCallback(Callback):
     self.val_gen = val_gen
     self.mean_per_log = []
     self.mean_val_per_log = []
-    self.shuffle = True
+    self.shuffle = shuffle
     self.train_eval_samples = min(train_gen.num_samples, 1024)
     self.model_dir = model_dir
     self.record_file = open(model_dir + 'training.log', 'w')
@@ -150,29 +150,3 @@ class ValPERCallback(Callback):
     self.record_file.write('===========================================================\n')
 
     return
-
-def aggregate_per_avg(bt_size, all_size, bt_per, all_per):
-  alpha = bt_size / all_size
-  return (alpha * bt_per) + ((1.0 - alpha) * all_per)
-
-def calc_per_single(pred_seq, true_seq):
-  pred_seq = pred_seq.tolist()
-  true_seq = true_seq.tolist()
-  # print ('true ori:', true_seq)
-  # print ('pred ori:', pred_seq)
-
-  pred_seq = pred_seq[ : rindex(pred_seq, 0) + 1 ]
-  true_seq = true_seq[ : true_seq.index(0) + 1 ]
-  PER = float(levenshtein.distance(pred_seq, true_seq)) / float( len(true_seq) )
-  # print ('true:', true_seq)
-  # print ('pred:', pred_seq)
-  # print ('PER: ', PER)
-  # print ('===============================================')
-
-  return PER
-
-def rindex(arr, val):
-  try:
-    return len(arr) - arr[::-1].index(val) - 1
-  except:
-    return len(arr) - 1
