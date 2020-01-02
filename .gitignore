@@ -2,6 +2,7 @@
 __pycache__
 final/output/
 final/data/
+final/model*
 
 .o
 .h.gch

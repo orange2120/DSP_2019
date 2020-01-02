@@ -3,7 +3,7 @@ import numpy as np
 import pickle, os
 from sklearn.model_selection import train_test_split
 
-def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False, save_dir=None, train_val_split=False, val_size=None):
+def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False, save_dir=None, is_train=True, train_val_split=False, val_size=None):
   df_final = pd.DataFrame()
 
   spec_files = os.listdir(spectrogram_dir)
@@ -66,12 +66,19 @@ def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False
   
 
 if __name__ == '__main__':
-  build_dataset_df(
-    '../../dataset_train/spectrogram', 
-    '../../dataset_train/phoneme/', 
-    save=True, save_dir='../../dataset_train/',
-    train_val_split=False
-  )
+  # build_dataset_df(
+  #   '../../dataset_train/spectrogram', 
+  #   '../../dataset_train/phoneme/', 
+  #   save=True, save_dir='../../dataset_train/',
+  #   train_val_split=False
+  # )
+
+  # build_dataset_df(
+  #   '../../dataset_dev/spectrogram', 
+  #   '../../dataset_dev/phoneme/', 
+  #   save=True, save_dir='../../dataset_dev/',
+  #   train_val_split=False
+  # )
 
   build_dataset_df(
     '../../dataset_dev/spectrogram', 
