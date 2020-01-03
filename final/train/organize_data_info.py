@@ -7,39 +7,42 @@ def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False
   df_final = pd.DataFrame()
 
   spec_files = os.listdir(spectrogram_dir)
-  phone_files = os.listdir(phone_seqs_dir)
-  assert ( len(spec_files) == len(phone_files) )
-
   spec_files = sorted(spec_files)
-  phone_files = sorted(phone_files)
   print (spec_files[:10])
-  print (phone_files[:10])
 
-  for i in range( len(spec_files) ):
-    print (spec_files[i].split('.wav')[0], phone_files[i].split('.wav')[0])
-    assert ( spec_files[i].split('.wav')[0] == phone_files[i].split('.wav')[0] )
+  if is_train:
+    phone_files = os.listdir(phone_seqs_dir)
+    assert ( len(spec_files) == len(phone_files) )
+    phone_files = sorted(phone_files)
+    print (phone_files[:10])
+
+    for i in range( len(spec_files) ):
+      print (spec_files[i].split('.spec')[0], phone_files[i].split('.phone')[0])
+      assert ( spec_files[i].split('.spec')[0] == phone_files[i].split('.phone')[0] )
 
   spec_files = [spectrogram_dir + '/' + spec_fp for spec_fp in spec_files]
-  phone_files = [phone_seqs_dir + '/' + phone_fp for phone_fp in phone_files]
-  assert ( len(spec_files) == len(phone_files) )
+  if is_train:
+    phone_files = [phone_seqs_dir + '/' + phone_fp for phone_fp in phone_files]
+    assert ( len(spec_files) == len(phone_files) )
 
-  phone_seqs = []
-  for phone_fp in phone_files:
-    phone_seqs.append( pickle.load( open(phone_fp, 'rb') )[0] )
-  assert ( len(spec_files) == len(phone_seqs) )
+    phone_seqs = []
+    for phone_fp in phone_files:
+      phone_seqs.append( pickle.load( open(phone_fp, 'rb') ) )
+    assert ( len(spec_files) == len(phone_seqs) )
+
+    df_final['phone_seq'] = phone_seqs
 
   df_final['melspec_path'] = spec_files
-  df_final['phone_seq'] = phone_seqs
-
   melspec_lens = []
   for melspec in spec_files:
-    melspec_lens.append( len( pickle.load(open(melspec, 'rb')) ) )
+    melspec_lens.append( np.load(melspec).shape[0] )
   df_final['melspec_len'] = melspec_lens
 
-  phone_seq_lens = []
-  for seq in phone_seqs:
-    phone_seq_lens.append( len(seq) )
-  df_final['phone_seq_len'] = phone_seq_lens
+  if is_train:
+    phone_seq_lens = []
+    for seq in phone_seqs:
+      phone_seq_lens.append( len(seq) )
+    df_final['phone_seq_len'] = phone_seq_lens
 
   print( df_final.head(30) )
   print( df_final.info() )
@@ -48,7 +51,11 @@ def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False
     if not train_val_split:
       if sortagrad:
         df_final = df_final.sort_values(by='melspec_len', ascending=True)
-      df_final.to_csv(save_dir + 'data_info.csv', index=False, encoding='utf-8')
+
+      if is_train:
+        df_final.to_csv(save_dir + 'data_info.csv', index=False, encoding='utf-8')
+      else:
+        df_final.to_csv(save_dir + 'data_info_test.csv', index=False, encoding='utf-8')
 
     else:
       assert ( val_size is not None )
@@ -63,7 +70,6 @@ def build_dataset_df(spectrogram_dir, phone_seqs_dir, sortagrad=True, save=False
       df_val.to_csv(save_dir + 'data_info_val.csv', index=False, encoding='utf-8')
 
   return
-  
 
 if __name__ == '__main__':
   # build_dataset_df(
@@ -81,8 +87,9 @@ if __name__ == '__main__':
   # )
 
   build_dataset_df(
-    '../../dataset_dev/spectrogram', 
-    '../../dataset_dev/phoneme/', 
-    save=True, save_dir='../../dataset_dev/',
+    './tiny_4096/melspec', 
+    None, 
+    save=True, save_dir='./tiny_4096/',
+    is_train=False,
     train_val_split=False
   )
