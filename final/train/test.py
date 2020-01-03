@@ -1,5 +1,6 @@
 import os, sys, pickle, time
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+sys.path.append('../')
 
 import numpy as np
 import pandas as pd

@@ -1,4 +1,6 @@
-import pickle, os
+import pickle, os, sys
+sys.path.append('../waveproc/')
+
 import linecache
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,9 +8,9 @@ from wav_to_melspec import read_wav, preemphasis, wav_to_melspec
 from wav_to_melspec import plot_wav, plot_melspec
 
 # TOKENIZER_PATH = './pickles/phone_tokenizer.pkl'
-TRAIN_DATA_DIR = '../../../speech_data/YNC/seg10db/'
+TRAIN_DATA_DIR = '../data/speech_data/YNC/seg10db/'
 # PHONE_IDX_SEQS_PATH = './tiny_4096/phone_seq/phone_seqs.pkl'
-MELSPEC_OUTPUT_DIR = '../../../speech_data/YNC/melspec_10db/'
+MELSPEC_OUTPUT_DIR = '../data/speech_data/YNC/melspec_10db/'
 
 SR = 32000
 # NUM_SAMPLES = 4096

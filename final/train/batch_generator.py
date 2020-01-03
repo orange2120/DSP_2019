@@ -89,9 +89,9 @@ class BatchGenerator(object):
     return [ast.literal_eval(p_seq) for p_seq in phone_seq_strs]
 
   def load_melspectrogram(self, spec_file, padlen):
-    spec = pickle.load( open(spec_file, 'rb') )	
-    spec = np.array(spec)
-    # spec = np.load(spec_file)
+    # spec = pickle.load( open(spec_file, 'rb') )	
+    # spec = np.array(spec)
+    spec = np.load(spec_file)
 
     if self.normalize:
       spec = (spec - np.min(spec)) / ( np.max(spec) - np.min(spec) + 1e-12 )

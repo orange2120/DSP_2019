@@ -149,7 +149,7 @@ def main(args):
 
     frames = frame_generator(30, audio, sample_rate)
     frames = list(frames)
-    segments = vad_collector(sample_rate, 30, 600, vad, frames)
+    segments = vad_collector(sample_rate, 30, 400, vad, frames)
 
     hit_cnt, tot_cnt = 0, 0
     for i, segment in enumerate(segments):

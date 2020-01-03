@@ -1,6 +1,6 @@
-input_file=../../../speech_data/YNC/YNC2.txt
-input_dir=../../../speech_data/YNC/
-output_dir=../../../speech_data/YNC/10db/
+input_file=../data/speech_data/YNC/YNC_new.txt
+input_dir=../data/speech_data/YNC/
+output_dir=../data/speech_data/YNC/10db/
 
 for name in `cat $input_file`
 do
