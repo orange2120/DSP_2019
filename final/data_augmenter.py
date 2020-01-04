@@ -1,7 +1,8 @@
-import os, pickle, random
+import os, pickle, random, sys
 import numpy as np
 import pandas as pd
 from math import ceil
+sys.path.append('./waveproc/')
 
 from wav_to_melspec_aug import plot_wav, plot_melspec, read_wav, dump_wav
 from wav_to_melspec_aug import preemphasis, wav_to_melspec
@@ -179,12 +180,12 @@ class DataAugmenter(object):
 
 if __name__ == '__main__':
   aug = DataAugmenter(
-    './data_thchs30/data',
-    './tiny_4096/phone_seq',
-    './aug_256/wav',
-    './aug_256/melspec',
-    './aug_256/',
-    n_samples=16,
+    './data_thchs30/train/',
+    './data/dataset_train/phoneme',
+    './data/dataset_train_aug/wav',
+    './data/dataset_train_aug/melspec',
+    './data/dataset_train_aug/',
+    n_samples=None,
   )
 
   aug.augmentation()

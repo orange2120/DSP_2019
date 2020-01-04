@@ -1,5 +1,6 @@
 import os, sys, pickle, time
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+sys.path.append('../')
 
 import keras.backend as K
 import pandas as pd
@@ -31,7 +32,7 @@ if __name__ == '__main__':
   model = ds2_model(phone_tokenizer.dict_size + 2)
   model.summary()
   
-  adam_opt = Adam(lr=lr)
+  adam_opt = Adam(lr=lr, clipnorm=100)
   model.compile(
     adam_opt, 
     loss={'ctc_loss': lambda y_true, y_pred: y_pred}
