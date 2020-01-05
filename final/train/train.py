@@ -1,6 +1,6 @@
 import os, sys, pickle, time
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-sys.path.append('../')
+# sys.path.append('../')
 
 import keras.backend as K
 import pandas as pd

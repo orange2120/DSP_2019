@@ -6,6 +6,7 @@ from keras.callbacks import Callback
 from math import ceil
 import matplotlib.pyplot as plt
 from score_utils import aggregate_per_avg, calc_per_single, rindex
+from random import shuffle
 
 class ValPERCallback(Callback):
   def __init__(self, decode_fctn, train_gen, val_gen, model_dir):
@@ -14,7 +15,7 @@ class ValPERCallback(Callback):
     self.val_gen = val_gen
     self.mean_per_log = []
     self.mean_val_per_log = []
-    self.shuffle = shuffle
+    self.shuffle = True
     self.train_eval_samples = min(train_gen.num_samples, 1024)
     self.model_dir = model_dir
     self.record_file = open(model_dir + 'training.log', 'w')
