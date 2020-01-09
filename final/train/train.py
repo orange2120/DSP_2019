@@ -46,7 +46,7 @@ if __name__ == '__main__':
   model.fit_generator(
     generator=train_btgen.next_batch(),
     steps_per_epoch=ceil( train_btgen.num_samples / bt_size ),
-    epochs=40,
+    epochs=10,
     validation_data=val_btgen.next_batch(),
     validation_steps=ceil( val_btgen.num_samples / bt_size ),
     callbacks=[

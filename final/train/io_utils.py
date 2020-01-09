@@ -2,7 +2,8 @@ import pickle
 import pandas as pd
 
 def read_data_df(csv_path, train=True):
-  df = pd.read_csv(csv_path, encoding='utf-8')
+  # df = pd.read_csv(csv_path, encoding='utf-8')
+  df = pd.read_csv(csv_path)
 
   if not train:
     df = df[ ['melspec_path', 'melspec_len'] ]

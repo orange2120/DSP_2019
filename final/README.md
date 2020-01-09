@@ -13,4 +13,6 @@ $ python3 gen_dataset.py <number of dataset> <source directory path> <phoneme se
 Train command:
 ```bash
 $ python3 train.py <train data_info.csv path> <validation data_info.csv path> <phone_tokenizer.pkl path> <learning rate> <batch size> <model save dir>
+
+$ python3 test.py <phone_tokenizer path> <model weights path> <output dir path> <test batch size>
 ```
