@@ -20,7 +20,7 @@ def predict(test_df, batch_size, model, decode_fctn, phone_tokenizer):
     s.split('/')[-1].split('.spec')[0] \
       for s in test_df['melspec_path'].tolist()
   ]
-  print (entries_name)
+  #print (entries_name)
 
   decoded_phone_seqs = []
   for b in range(n_batches):
@@ -30,6 +30,7 @@ def predict(test_df, batch_size, model, decode_fctn, phone_tokenizer):
       [ batch['melspec_input'], batch['pred_len'] ]
     )[0]
     decoded_batch_phone_seqs = phone_tokenizer.seqs_to_text( decoded_seqs.tolist() )
+    
     print (decoded_batch_phone_seqs)
 
     decoded_phone_seqs.extend( decoded_batch_phone_seqs )
@@ -63,6 +64,7 @@ if __name__ == '__main__':
 
   pred_phone_seqs, entries_name = predict(test_df, test_batch_size, model, decode_fctn, phone_tokenizer)
 
+  print('pred phone seq')
   print (len(pred_phone_seqs))
   print (pred_phone_seqs[:10])
 

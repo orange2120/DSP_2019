@@ -8,9 +8,9 @@ from wav_to_melspec import read_wav, preemphasis, wav_to_melspec
 from wav_to_melspec import plot_wav, plot_melspec
 
 # TOKENIZER_PATH = './pickles/phone_tokenizer.pkl'
-TRAIN_DATA_DIR = '../data/speech_data/YNC/seg10db/'
+TRAIN_DATA_DIR = '../data/speech_data/L.S._Lee/seg/'
 # PHONE_IDX_SEQS_PATH = './tiny_4096/phone_seq/phone_seqs.pkl'
-MELSPEC_OUTPUT_DIR = '../data/speech_data/YNC/melspec_10db/'
+MELSPEC_OUTPUT_DIR = '../data/speech_data/L.S._Lee/melspec_seg/'
 
 SR = 32000
 # NUM_SAMPLES = 4096
@@ -55,9 +55,9 @@ for i in range( len(entries_wav) ):
   wav = preemphasis(wav)
   melspec = wav_to_melspec(wav, SR, 800, 320, fmin=20, fmax=8000, transpose=True)
 
-  if i < 10:
-    plot_wav(wav, SR, show=True)
-    plot_melspec(melspec, SR, 320, transposed=True, show=True)
+  # if i < 10:
+  #   plot_wav(wav, SR, show=True)
+  #   plot_melspec(melspec, SR, 320, transposed=True, show=True)
 
   spec_lens.append( melspec.shape[0] )
   spec_filepath = MELSPEC_OUTPUT_DIR + entries_wav[i].split('.wav')[0] + '.spec'

@@ -27,11 +27,17 @@ class BatchGenerator(object):
     self.conv_factor = conv_factor
     self.cur_idx = 0
 
+    #print(self.melspec_path)
+    #print(self.melspec_len)
+
   def get_batch(self, idx):
     cur_batch_size = min(self.batch_size, self.num_samples - (self.batch_size * idx) )
     batch_x = self.melspec_path[ self.batch_size * idx : self.batch_size * (idx+1) ]
     batch_x_lens = self.melspec_len[ self.batch_size * idx : self.batch_size * (idx+1) ]
 
+    print('*******************************batch_x_lens************************')
+    print(batch_x_lens)
+    
     if self.is_train:
       batch_y_seq = deepcopy( self.phone_seq[ self.batch_size * idx : self.batch_size * (idx+1) ] )
       batch_y_lens = self.phone_seq_len[ self.batch_size * idx : self.batch_size * (idx+1) ]
@@ -39,6 +45,10 @@ class BatchGenerator(object):
     batch_x_melspec = np.array( 
       [self.load_melspectrogram(fp, max(batch_x_lens)) for fp in batch_x]
     )
+
+    print('*******************************batch_x_lens************************', end='')
+    print(batch_x_lens)
+
     assert ( batch_x_melspec.shape == (cur_batch_size, max(batch_x_lens), self.n_mels) )
     
     batch_x_lens = np.ceil( np.array(batch_x_lens) / self.conv_factor ) - 2
@@ -103,6 +113,8 @@ class BatchGenerator(object):
       else:
         min_pad = np.full( (padlen - spec.shape[0], spec.shape[1]), np.min(spec) )
         spec = np.vstack( (spec, min_pad) )
+    
+    print(spec.shape)
 
     assert ( spec.shape == (padlen, self.n_mels) )
 
