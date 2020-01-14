@@ -46,9 +46,6 @@ class BatchGenerator(object):
       [self.load_melspectrogram(fp, max(batch_x_lens)) for fp in batch_x]
     )
 
-    print('*******************************batch_x_lens************************', end='')
-    print(batch_x_lens)
-
     assert ( batch_x_melspec.shape == (cur_batch_size, max(batch_x_lens), self.n_mels) )
     
     batch_x_lens = np.ceil( np.array(batch_x_lens) / self.conv_factor ) - 2

@@ -87,9 +87,11 @@ if __name__ == '__main__':
   # )
 
   build_dataset_df(
-    '../data/speech_data/L.S._Lee/melspec_seg', 
+    '../data/speech_data/YNC/melspec_seg10db', 
+    #'../data/speech_data/L.S._Lee/melspec_seg', 
     None, 
-    save=True, save_dir='../data/speech_data/L.S._Lee/',
+    save=True, save_dir='../data/speech_data/YNC/',
+    #save=True, save_dir='../data/speech_data/L.S._Lee/',
     is_train=False,
     train_val_split=False
   )
